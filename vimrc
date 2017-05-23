@@ -1,159 +1,163 @@
+let s:dein_dir = expand('~/.vim/dein')
+let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
 
-set encoding=utf8
-syntax on
-set background=dark
+if &compatible
+  set nocompatible
+endif
+
+if !isdirectory(s:dein_repo_dir)
+  execute '!git clone git@github.com:Shougo/dein.vim.git' s:dein_repo_dir
+endif
+
+execute 'set runtimepath^=' . s:dein_repo_dir
+
+call dein#begin(s:dein_dir)
+
+call dein#add('Shougo/dein.vim')
+call dein#add('Shougo/neocomplete.vim')
+call dein#add('Shougo/neosnippet.vim') 
+call dein#add('Shougo/neosnippet-snippets') 
+call dein#add('itchyny/lightline.vim') 
+call dein#add('nathanaelkane/vim-indent-guides')
+call dein#add('Townk/vim-autoclose') 
+call dein#add('honza/vim-snippets') 
+call dein#add('ujihisa/neco-look') 
+call dein#add('tpope/vim-surround') 
+call dein#add('tpope/vim-haml') 
+call dein#add('tpope/vim-endwise') 
+call dein#add('ctrlpvim/ctrlp.vim') 
+call dein#add('thinca/vim-ref') 
+call dein#add('slim-template/vim-slim') 
+call dein#add('szw/vim-tags') 
+call dein#add('scrooloose/syntastic') 
+call dein#add('cespare/vim-toml') 
+call dein#add('Shougo/unite.vim') 
+call dein#add('Shougo/neoinclude.vim') 
+call dein#add('Shougo/context_filetype.vim') 
+call dein#add('kana/vim-operator-user') 
+call dein#add('Shougo/vimproc.vim', {'build': 'make'}) 
+call dein#add('tomasr/molokai') 
+call dein#add('joshdick/onedark.vim') 
+call dein#add('osyo-manga/vim-marching', {
+            \ 'depends' : ['Shougo/vimproc.vim', 'osyo-manga/vim-reunions'],
+            \ 'autoload' : {'filetypes' : ['c', 'cpp']}
+            \ }) 
+call dein#add('vim-jp/cpp-vim', {
+            \ 'autoload' : {'filetypes' : 'cpp'}
+            \ }) 
+call dein#add('Rip-Rip/clang_complete', {
+            \ 'autoload' : {'filetypes' : ['c', 'cpp']}
+            \ })
+
+call dein#end()
+
+if dein#check_install()
+  call dein#install()
+endif
+
 filetype plugin indent on
 
-"==========display==========
-set number		" show line number 
-set showmode 		" show mode 
-set title		" show editting file
-set ruler 		" show ruler
-set showcmd		" show command status 
-set showmatch		" show parenthesis
-set scrolloff=5		" set scroll row number
-set cursorline		" highlight current line
+set nu
+set encoding=utf-8
+"colorscheme molokai
+colorscheme onedark
+syntax on
+set t_Co=16
+"let g:molokai_original = 1
+"let g:rehash256 = 1
+let g:onedark_termcolors=16
+set background=light
+set showmode
+set title
+set ruler
+set showcmd
+set showmatch
+set scrolloff=5
+set cursorline
+highlight CursorLine cterm=underline ctermfg=NONE ctermbg=NONE
 set list
-set listchars=tab:»-,trail:▸    "visualize unseen character
-set laststatus=2        "show status line
-
-" show double-byte space
+"set listchars=tab:-,trail:
+set laststatus=2
 highlight ZenkakuSpace cterm=underline ctermfg=lightblue guibg=#666666
-au BufNewFile,BufRead * match ZenkakuSpace /　/
-
-"========== operation==========
-set autoread		" update file automaticaly
-set expandtab 		" insert space character insted tab
-inoremap <silent> jj <ESC> 	" change from insert to command by typping jj" 
+au BufNewFile,BufRead * match ZenkakuSpace //
+set autoread " update file automaticaly
+set expandtab " insert space character insted tab
+inoremap <silent> jj <ESC> " change from insert to command by typping jj"
 set nosi                " disable smartindext
 set tabstop=2 shiftwidth=2 softtabstop=2        "set indent space
 set backspace=2
-
-"========== search==========
 set wrapscan
 set ignorecase
 set smartcase
 set noincsearch
+set hlsearch
 
-" ============ neobundle ===============
-function! s:WithoutBundles()
-  "colorscheme desert
-endfunction
-
-if has('vim_starting')
-  if &compatible
-     set nocompatible
-  endif
-
-  set runtimepath+=~/.vim/bundle/neobundle.vim
-endif
-
-" ======== plugin =========
-function! s:LoadBundles()
-  NeoBundle 'Shougo/neobundle.vim'
-  NeoBundle 'tpope/vim-surround'
-  NeoBundle 'tpope/vim-rails'
-  NeoBundle 'Shougo/unite.vim'
-  NeoBundle 'Shougo/neomru.vim'
-  NeoBundle 'Shougo/neosnippet-snippets'
-  NeoBundleLazy 'Shougo/neosnippet'
-  NeoBundle "ctrlpvim/ctrlp.vim"
-  NeoBundle "Shougo/neocomplete"
-  NeoBundle "scrooloose/nerdtree"
-  NeoBundle "tpope/vim-haml"
-  NeoBundle 'basyura/unite-rails'
-  NeoBundle 'ujihisa/unite-rake'
-  NeoBundle 'tpope/vim-endwise'
-  NeoBundle 'thinca/vim-ref'
-  NeoBundle 'slim-template/vim-slim'
-  NeoBundle 'szw/vim-tags'
-  NeoBundle 'supermomonga/neocomplete-rsense.vim'
-  NeoBundle 'scrooloose/syntastic'
-
-  if has('lua')
-    NeoBundleLazy 'Shougo/neocomplete', {
-     \   'depends' : ['Shougo/neosnippet', 'Shougo/context_filetype.vim'],
-     \   'autoload' : {
-     \       'insert' : 1,
-     \   }
-     \}
-  endif
-
-  " colorschemes
-  NeoBundle 'ujihisa/unite-colorscheme'
-  NeoBundle 'nanotech/jellybeans.vim'
-  NeoBundle 'w0ng/vim-hybrid'
-  NeoBundle 'vim-scripts/twilight'
-  NeoBundle 'jonathanfilip/vim-lucius'
-  NeoBundle 'jpo/vim-railscasts-theme'
-  NeoBundle 'altercation/vim-colors-solarized'
-  NeoBundle 'vim-scripts/Wombat'
-  NeoBundle 'tomasr/molokai'
-  NeoBundle 'vim-scripts/rdark'
-  NeoBundle 'w0ng/vim-hybrid'
-  NeoBundle 'jpo/vim-railscasts-theme'
-  NeoBundle 'altercation/vim-colors-solarized'
-  NeoBundle 'vim-scripts/rdark'
-
-  " plugin settings
-  " for Unite
-  let g:unite_enable_start_insert=1
-  " for neomru
-  let g:neomru#time_format = "(%Y/%m/%d %H:%M:%S) "
-  noremap :um :Unite file_mru
-
-  " rense
-  let g:rsenseUseOmniFunc = 1
-endfunction
-
-" call LoadBundles() if Neobundle was installed, otherwise call WithoutBundles()
-function! s:InitNeoBundle()
-  if isdirectory(expand("~/.vim/bundle/neobundle.vim/"))
-    filetype plugin indent off
-    if has('vim_starting')
-      set runtimepath+=~/.vim/bundle/neobundle.vim/
-    endif
-
-    try
-      call neobundle#begin(expand('~/.vim/bundle/'))
-        call s:LoadBundles()
-      call neobundle#end()
-    catch
-      call s:WithoutBundles()
-    endtry
+let g:lightline = {
+      \ 'colorscheme': 'onedark',
+      \ 'active': {
+      \   'left': [['mode', 'paste'],
+      \            ['fugitive', 'readonly', 'filename', 'modified']]
+      \ },
+      \ 'component': {
+      \   'readonly': '%{&filetype=="help"?"":&readonly?"":""}',
+      \   'modified': '%{&filetype=="help"?"":&modified?"+":&modifiable?"":"-"}',
+      \   'fugitive': '%{exists("*fugitive#head")?fugitive#head():""}'
+      \ },
+      \ 'component_visible_condition': {
+      \   'readonly': '(&filetype!="help"&& &readonly)',
+      \   'modified': '(&filetype!="help"&&(&modified||!&modifiable))',
+      \   'fugitive': '(exists("*fugitive#head") && ""!=fugitive#head())'
+      \ },
+  \ }
+augroup cpp-namespace
+  autocmd!
+  autocmd FileType cpp inoremap <buffer><expr>; <SID>expand_namespace()
+augroup END
+augroup cpp-path
+      autocmd!
+      autocmd FileType cpp setlocal path=.,/usr/include,/usr/local/include,/usr/lib/c++/v1
+augroup END
+function! s:expand_namespace()
+  let s = getline('.')[0:col('.')-1]
+  if s =~# '\<b;$'
+    return "\<BS>oost::"
+  elseif s =~# '\<s;$'
+    return "\<BS>td::"
+  elseif s =~# '\<d;$'
+    return "\<BS>etail::"
+  elseif s =~# '\<p;$'
+    return "\<BS>qxx::"
   else
-    call s:WithoutBundles()
+    return ';'
   endif
-
-  filetype indent plugin on
-  syntax on
 endfunction
 
-call s:InitNeoBundle()
+let g:neomru#time_format = "(%Y/%m/%d %H:%M:%S) "
+noremap :um :Unite file_mru
 
-" settings neocomplete
-if neobundle#is_installed('neocomplete')
-  let g:neocomplete#enable_at_startup = 1
-  let g:neocomplete#enable_ignore_case = 1
-  let g:neocomplete#enable_smart_case = 1
-  let g:neocomplete#force_overwrite_completefunc = 1
+let g:indent_guides_enable_on_vim_startup = 1
+let g:indent_guides_auto_colors = 0
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd ctermbg=97
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=68
+let g:indent_guides_guide_size=1
 
-  if !exists('g:neocomplete#keyword_patterns')
-    let g:neocomplete#keyword_patterns = {}
-  endif
+filetype on
+filetype plugin indent on
 
-  let g:neocomplete#keyword_patterns._ = '\h\w*'
-
-  if !exists('g:neocomplete#force_omni_input_patterns')
-    let g:neocomplete#force_omni_input_patterns = {}
-  endif
-  let g:neocomplete#force_omni_input_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
-  inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-  inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
-end
-
-autocmd VimEnter * execute 'NERDTree'
-autocmd QuickFixCmdPost *grep* cwindow
-
-set nu
-
+let g:neocomplete#force_overwrite_completefunc = 1
+let g:acp_enableAtStartup = 0
+let g:neocomplete#enable_at_startup = 1
+let g:neocomplete#enable_smart_case = 1
+let g:neocomplete#enable_camel_case_completion = 1
+let g:neocomplete#enable_underbar_completion = 1
+let g:neocomplete#min_syntax_length = 2
+let g:neocomplete#enable_auto_select = 1
+if !exists('g:neocomplete#force_omni_input_patterns')
+        let g:neocomplete#force_omni_input_patterns = {}
+endif
+let g:neocomplete#force_omni_input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
+let g:neocomplete#force_omni_input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+imap <expr><TAB> neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
+smap <expr><TAB> neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+let g:marching_enable_neocomplete = 1
+"let g:clang_library_path = '/usr/lib/'
